@@ -1,0 +1,30 @@
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#productsSection{
+    display: flex;
+    justify-content: center;
+}
+
+img {
+    width: 200px;
+    height: 200px;
+    margin: 30px;
+    cursor: pointer;
+}
+
+h1 {
+    text-align: center;
+}
+
+div {
+    display: flex;
+    justify-content: center;
+}
+
+button {
+margin:auto;
+width:120px;
+height:50px;
+}
