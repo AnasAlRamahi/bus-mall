@@ -2,7 +2,12 @@
 
 let arrProducts = [];
 let numOfClicks = 0;
-let lastAttempt = 5;
+let lastAttempt = 25;
+
+// This array will contain all the images that have been shown
+// and save it inside. The code was designed to prevent the 
+// images contined here to appear more than once.
+let shownArr = [];
 
 // let section = document.getElementById('productsSection');
 let main = document.getElementById('main');
@@ -66,23 +71,63 @@ function render(){
   secondRandomValue = randomImage();
   thirdRandomValue = randomImage();
 
+  // This condition in the while loop was put to prevent
+  // showing the same image twice.
+  while(shownArr.indexOf(arrProducts[firstRandomValue]) > -1){
+    firstRandomValue = randomImage();
+    //this if was put to prevent infinite loop if the pictures ended before the tries when you change the number of attempts.
+    if(shownArr.length === arrProducts.length){
+      buttonEl.addEventListener('click', viewResults);
+      leftImage.removeEventListener('click', roundImages);
+      centerImage.removeEventListener('click', roundImages);
+      rightImage.removeEventListener('click', roundImages);
+      break;
+    }
+
+  }
   leftImage.src = arrProducts[firstRandomValue].imgPath;
   // eslint-disable-next-line no-undef
   arrProducts[firstRandomValue].timesShown++;
-  while(secondRandomValue === firstRandomValue){
+  shownArr.push(arrProducts[firstRandomValue]);
+
+  // The last condition in the while loop was put to prevent
+  // showing the same image twice.
+  while(secondRandomValue === firstRandomValue || shownArr.indexOf(arrProducts[secondRandomValue]) > -1){
     secondRandomValue = randomImage();
+    //this if was put to prevent infinite loop if the pictures ended before the tries when you change the number of attempts.
+    if(shownArr.length === arrProducts.length){
+      buttonEl.addEventListener('click', viewResults);
+      leftImage.removeEventListener('click', roundImages);
+      centerImage.removeEventListener('click', roundImages);
+      rightImage.removeEventListener('click', roundImages);
+      break;
+    }
   }
   centerImage.src = arrProducts[secondRandomValue].imgPath;
   arrProducts[secondRandomValue].timesShown++;
+  shownArr.push(arrProducts[secondRandomValue]);
   //   console.log(firstRandomValue);
   //   console.log(secondRandomValue);
 
-  while(thirdRandomValue === secondRandomValue || thirdRandomValue === firstRandomValue){
+  // The last condition in the while loop was put to prevent
+  // showing the same image twice.
+  while(thirdRandomValue === secondRandomValue || thirdRandomValue === firstRandomValue || shownArr.indexOf(arrProducts[thirdRandomValue]) > -1){
     thirdRandomValue = randomImage();
+    //this if was put to prevent infinite loop if the pictures ended before the tries when you change the number of attempts.
+    if(shownArr.length === arrProducts.length){
+      buttonEl.addEventListener('click', viewResults);
+      leftImage.removeEventListener('click', roundImages);
+      centerImage.removeEventListener('click', roundImages);
+      rightImage.removeEventListener('click', roundImages);
+      break;
+    }
   }
   //   console.log(thirdRandomValue);
   rightImage.src = arrProducts[thirdRandomValue].imgPath;
   arrProducts[thirdRandomValue].timesShown++;
+  shownArr.push(arrProducts[thirdRandomValue]);
+
+
 }
 
 render();
@@ -102,10 +147,10 @@ function roundImages(event){
     arrProducts[thirdRandomValue].timesClicked++;
   }
 
-  if (numOfClicks < lastAttempt){
+  if (numOfClicks < lastAttempt && shownArr.length !== arrProducts.length){
     render();
   }else{
-    buttonEl.addEventListener('click', viewReslts);
+    buttonEl.addEventListener('click', viewResults);
     leftImage.removeEventListener('click', roundImages);
     centerImage.removeEventListener('click', roundImages);
     rightImage.removeEventListener('click', roundImages);
@@ -113,14 +158,14 @@ function roundImages(event){
   }
 }
 
-function viewReslts(){
+function viewResults(){
   let ulEl = document.createElement('ul');
   main.appendChild(ulEl);
   for (let i = 0; i < arrProducts.length; i++) {
     let liEl = document.createElement('li');
     ulEl.appendChild(liEl);
     liEl.textContent = `${arrProducts[i].productName} had ${arrProducts[i].timesClicked} votes, and was seen ${arrProducts[i].timesShown} times.`;
-    buttonEl.removeEventListener('click', viewReslts);
+    buttonEl.removeEventListener('click', viewResults);
   }
 }
 
