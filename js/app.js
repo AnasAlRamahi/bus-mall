@@ -1,8 +1,15 @@
 'use strict';
 
+<<<<<<< HEAD
 let arrProducts = [];
 let numOfClicks = 0;
 let lastAttempt = 5;
+=======
+
+let arrProducts = [];// Stores all the image objects
+let numOfClicks = 0; // Stores the number of clicks the user has made so far
+let lastAttempt = 5; // Number of attempts
+>>>>>>> 833fa72fbb7ca969f597dc60e52b68dc480f9581
 
 // 3 arrays to display the data on the chart:
 let arrChartNames = [];
@@ -34,24 +41,24 @@ function randomImage(){
 
 }
 
-new Products('bag','../img/bag.jpg' );
-new Products('banana','../img/banana.jpg' );
-new Products('bathroom','../img/bathroom.jpg' );
-new Products('boots','../img/boots.jpg' );
-new Products('bubblegum','../img/bubblegum.jpg' );
-new Products('chair','../img/chair.jpg' );
-new Products('cthulhu','../img/cthulhu.jpg' );
-new Products('dog-duck','../img/dog-duck.jpg' );
-new Products('dragon','../img/dragon.jpg' );
-new Products('pet-sweep','../img/pet-sweep.jpg' );
-new Products('scissors','../img/scissors.jpg' );
-new Products('shark','../img/shark.jpg' );
-new Products('sweep','../img/sweep.png' );
-new Products('tauntaun','../img/tauntaun.jpg' );
-new Products('unicorn','../img/unicorn.jpg' );
-new Products('usb','../img/usb.gif' );
-new Products('water-can','../img/water-can.jpg' );
-new Products('wine-glass','../img/wine-glass.jpg' );
+new Products('bag','img/banana.jpg' );
+new Products('banana','img/banana.jpg' );
+new Products('bathroom','img/bathroom.jpg' );
+new Products('boots','img/boots.jpg' );
+new Products('bubblegum','img/bubblegum.jpg' );
+new Products('chair','img/chair.jpg' );
+new Products('cthulhu','img/cthulhu.jpg' );
+new Products('dog-duck','img/dog-duck.jpg' );
+new Products('dragon','img/dragon.jpg' );
+new Products('pet-sweep','img/pet-sweep.jpg' );
+new Products('scissors','img/scissors.jpg' );
+new Products('shark','img/shark.jpg' );
+new Products('sweep','img/sweep.png' );
+new Products('tauntaun','img/tauntaun.jpg' );
+new Products('unicorn','img/unicorn.jpg' );
+new Products('usb','img/usb.gif' );
+new Products('water-can','img/water-can.jpg' );
+new Products('wine-glass','img/wine-glass.jpg' );
 
 
 // console.log(randomImage());
@@ -86,28 +93,37 @@ function render(){
     secondRandomValue = randomImage();
     thirdRandomValue = randomImage();
   }
+<<<<<<< HEAD
   // console.log(firstRandomValue);
   // console.log(secondRandomValue);
   // console.log(thirdRandomValue);
   // console.log('-');
-
-  leftImage.src = arrProducts[firstRandomValue].imgPath;
-  arrProducts[firstRandomValue].timesShown++;
-  // shownArr.push(arrProducts[firstRandomValue]);
-  shownArr[0] = firstRandomValue;
-
-  centerImage.src = arrProducts[secondRandomValue].imgPath;
-  arrProducts[secondRandomValue].timesShown++;
-  // shownArr.push(arrProducts[secondRandomValue]);
-  shownArr[1] = secondRandomValue;
-
-  rightImage.src = arrProducts[thirdRandomValue].imgPath;
-  arrProducts[thirdRandomValue].timesShown++;
-  // shownArr.push(arrProducts[thirdRandomValue]);
-  shownArr[2] = thirdRandomValue;
-
-
+=======
 }
+
+console.log(firstRandomValue);
+console.log(secondRandomValue);
+console.log(thirdRandomValue);
+console.log('-');
+>>>>>>> 833fa72fbb7ca969f597dc60e52b68dc480f9581
+
+leftImage.src = arrProducts[firstRandomValue].imgPath;
+arrProducts[firstRandomValue].timesShown++;
+// shownArr.push(arrProducts[firstRandomValue]);
+shownArr[0] = firstRandomValue;
+
+centerImage.src = arrProducts[secondRandomValue].imgPath;
+arrProducts[secondRandomValue].timesShown++;
+// shownArr.push(arrProducts[secondRandomValue]);
+shownArr[1] = secondRandomValue;
+
+rightImage.src = arrProducts[thirdRandomValue].imgPath;
+arrProducts[thirdRandomValue].timesShown++;
+// shownArr.push(arrProducts[thirdRandomValue]);
+shownArr[2] = thirdRandomValue;
+
+
+
 
 render();
 
