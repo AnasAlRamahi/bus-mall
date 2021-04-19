@@ -2,10 +2,15 @@
 
 let arrProducts = [];
 let numOfClicks = 0;
-let lastAttempt = 25;
+let lastAttempt = 5;
+
+// 3 arrays to display the data on the chart:
+let arrChartNames = [];
+let arrChartShown = [];
+let arrChartClicked = [];
 
 // This array will contain all the images that have been shown
-// and save it inside. The code was designed to prevent the 
+// and save it inside. The code was designed to prevent the
 // images contined here to appear more than once.
 let shownArr = [];
 
@@ -73,45 +78,12 @@ function render(){
 
   // This condition in the while loop was put to prevent
   // showing the same image twice.
-  while(shownArr.indexOf(arrProducts[firstRandomValue]) > -1){
+  while(firstRandomValue === secondRandomValue || firstRandomValue === thirdRandomValue || secondRandomValue === thirdRandomValue
+     || shownArr.includes(firstRandomValue)
+     || shownArr.includes(secondRandomValue)
+     || shownArr.includes(thirdRandomValue)){
     firstRandomValue = randomImage();
-    //this if was put to prevent infinite loop if the pictures ended before the tries when you change the number of attempts.
-    if(shownArr.length === arrProducts.length){
-      buttonEl.addEventListener('click', viewResults);
-      leftImage.removeEventListener('click', roundImages);
-      centerImage.removeEventListener('click', roundImages);
-      rightImage.removeEventListener('click', roundImages);
-      break;
-    }
-
-  }
-  leftImage.src = arrProducts[firstRandomValue].imgPath;
-  // eslint-disable-next-line no-undef
-  arrProducts[firstRandomValue].timesShown++;
-  shownArr.push(arrProducts[firstRandomValue]);
-
-  // The last condition in the while loop was put to prevent
-  // showing the same image twice.
-  while(secondRandomValue === firstRandomValue || shownArr.indexOf(arrProducts[secondRandomValue]) > -1){
     secondRandomValue = randomImage();
-    //this if was put to prevent infinite loop if the pictures ended before the tries when you change the number of attempts.
-    if(shownArr.length === arrProducts.length){
-      buttonEl.addEventListener('click', viewResults);
-      leftImage.removeEventListener('click', roundImages);
-      centerImage.removeEventListener('click', roundImages);
-      rightImage.removeEventListener('click', roundImages);
-      break;
-    }
-  }
-  centerImage.src = arrProducts[secondRandomValue].imgPath;
-  arrProducts[secondRandomValue].timesShown++;
-  shownArr.push(arrProducts[secondRandomValue]);
-  //   console.log(firstRandomValue);
-  //   console.log(secondRandomValue);
-
-  // The last condition in the while loop was put to prevent
-  // showing the same image twice.
-  while(thirdRandomValue === secondRandomValue || thirdRandomValue === firstRandomValue || shownArr.indexOf(arrProducts[thirdRandomValue]) > -1){
     thirdRandomValue = randomImage();
     //this if was put to prevent infinite loop if the pictures ended before the tries when you change the number of attempts.
     if(shownArr.length === arrProducts.length){
@@ -122,10 +94,24 @@ function render(){
       break;
     }
   }
-  //   console.log(thirdRandomValue);
+  console.log(firstRandomValue);
+  console.log(secondRandomValue);
+  console.log(thirdRandomValue);
+  console.log("-");
+  leftImage.src = arrProducts[firstRandomValue].imgPath;
+  arrProducts[firstRandomValue].timesShown++;
+  // shownArr.push(arrProducts[firstRandomValue]);
+  shownArr[0] = firstRandomValue;
+
+  centerImage.src = arrProducts[secondRandomValue].imgPath;
+  arrProducts[secondRandomValue].timesShown++;
+  // shownArr.push(arrProducts[secondRandomValue]);
+  shownArr[1] = secondRandomValue;
+
   rightImage.src = arrProducts[thirdRandomValue].imgPath;
   arrProducts[thirdRandomValue].timesShown++;
-  shownArr.push(arrProducts[thirdRandomValue]);
+  // shownArr.push(arrProducts[thirdRandomValue]);
+  shownArr[2] = thirdRandomValue;
 
 
 }
@@ -137,17 +123,17 @@ centerImage.addEventListener('click', roundImages);
 rightImage.addEventListener('click', roundImages);
 
 function roundImages(event){
-  numOfClicks++;
 
   if(event.target.id === 'left-image'){
     arrProducts[firstRandomValue].timesClicked++;
   }else if(event.target.id === 'center-image') {
     arrProducts[secondRandomValue].timesClicked++;
-  }else{
+  }else
+  {
     arrProducts[thirdRandomValue].timesClicked++;
   }
 
-  if (numOfClicks < lastAttempt && shownArr.length !== arrProducts.length){
+  if (numOfClicks < lastAttempt-1 && shownArr.length !== arrProducts.length){
     render();
   }else{
     buttonEl.addEventListener('click', viewResults);
@@ -156,21 +142,67 @@ function roundImages(event){
     rightImage.removeEventListener('click', roundImages);
     console.log(arrProducts);
   }
+
+  numOfClicks++;
 }
 
 function viewResults(){
   let ulEl = document.createElement('ul');
   main.appendChild(ulEl);
   for (let i = 0; i < arrProducts.length; i++) {
-    let liEl = document.createElement('li');
-    ulEl.appendChild(liEl);
-    liEl.textContent = `${arrProducts[i].productName} had ${arrProducts[i].timesClicked} votes, and was seen ${arrProducts[i].timesShown} times.`;
+    arrChartNames.push(arrProducts[i].productName);
+    arrChartShown.push(arrProducts[i].timesShown);
+    arrChartClicked.push(arrProducts[i].timesClicked);
+    // let liEl = document.createElement('li');
+    // ulEl.appendChild(liEl);
+    // liEl.textContent = `${arrProducts[i].productName} had ${arrProducts[i].timesClicked} votes, and was seen ${arrProducts[i].timesShown} times.`;
     buttonEl.removeEventListener('click', viewResults);
   }
+  console.log(arrChartNames);
+  console.log(arrChartShown);
+  console.log(arrChartClicked);
+
+  // We call the chart render function instead of the list
+  viewChart();
 }
 
-let element;
-for (let i = 0; i < arrProducts.length; i++) {
-  element += arrProducts[i].timesShown;
-  console.log(element);
+
+function viewChart(){
+  let ctx = document.getElementById('myChart');
+  let myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: arrChartNames,
+      datasets: [{
+        label: '# of Views',
+        data: arrChartShown,
+        backgroundColor: [
+          'rgba(54, 162, 235, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+        ],
+        borderWidth: 1
+      },{
+        label: '# of Clicks',
+        data: arrChartClicked,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+        ],
+        borderWidth: 1
+      }
+      ]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
 }
+
