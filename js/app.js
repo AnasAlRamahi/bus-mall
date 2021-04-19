@@ -1,8 +1,8 @@
 'use strict';
 
-let arrProducts = [];// Stores all the image objects
-let numOfClicks = 0; // Stores the number of clicks the user has made so far
-let lastAttempt = 5; // Number of attempts
+let arrProducts = [];
+let numOfClicks = 0;
+let lastAttempt = 5;
 
 // 3 arrays to display the data on the chart:
 let arrChartNames = [];
@@ -14,10 +14,10 @@ let arrChartClicked = [];
 // images contined here to appear more than once.
 let shownArr = [];
 
-
-let mainSection = document.getElementById('productsSection');
+// let section = document.getElementById('productsSection');
 let main = document.getElementById('main');
 let buttonEl = document.getElementById('viewResults');
+
 
 
 function Products(productName, imgPath){
@@ -29,7 +29,9 @@ function Products(productName, imgPath){
 }
 
 function randomImage(){
+
   return Math.floor(Math.random() * arrProducts.length);
+
 }
 
 new Products('bag','../img/bag.jpg' );
@@ -75,32 +77,19 @@ function render(){
   thirdRandomValue = randomImage();
 
   // This condition in the while loop was put to prevent
-  // showing the same image in the next round, that's why
-  // I used the include method.
-  while(firstRandomValue === secondRandomValue
-     || firstRandomValue === thirdRandomValue
-     || secondRandomValue === thirdRandomValue
+  // showing the same image twice.
+  while(firstRandomValue === secondRandomValue || firstRandomValue === thirdRandomValue || secondRandomValue === thirdRandomValue
      || shownArr.includes(firstRandomValue)
      || shownArr.includes(secondRandomValue)
      || shownArr.includes(thirdRandomValue)){
-
     firstRandomValue = randomImage();
     secondRandomValue = randomImage();
     thirdRandomValue = randomImage();
-    //this if was put to prevent infinite loop if the pictures ended before the tries when you change the number of attempts.
-    if(shownArr.length === arrProducts.length){
-      buttonEl.addEventListener('click', viewResults);
-      leftImage.removeEventListener('click', roundImages);
-      centerImage.removeEventListener('click', roundImages);
-      rightImage.removeEventListener('click', roundImages);
-      break;
-    }
   }
-
-  console.log(firstRandomValue);
-  console.log(secondRandomValue);
-  console.log(thirdRandomValue);
-  console.log('-');
+  // console.log(firstRandomValue);
+  // console.log(secondRandomValue);
+  // console.log(thirdRandomValue);
+  // console.log('-');
 
   leftImage.src = arrProducts[firstRandomValue].imgPath;
   arrProducts[firstRandomValue].timesShown++;
@@ -122,12 +111,9 @@ function render(){
 
 render();
 
-
-// leftImage.addEventListener('click', roundImages);
-// centerImage.addEventListener('click', roundImages);
-// rightImage.addEventListener('click', roundImages);
-// -I added the event listener for the main section only as requested: -
-mainSection.addEventListener('click', roundImages);
+leftImage.addEventListener('click', roundImages);
+centerImage.addEventListener('click', roundImages);
+rightImage.addEventListener('click', roundImages);
 
 function roundImages(event){
 
@@ -135,12 +121,9 @@ function roundImages(event){
     arrProducts[firstRandomValue].timesClicked++;
   }else if(event.target.id === 'center-image') {
     arrProducts[secondRandomValue].timesClicked++;
-  }else if(event.target.id === 'right-image') {
-    arrProducts[secondRandomValue].timesClicked++;
-  }
-  else
+  }else
   {
-    alert('please click on the photos..');
+    arrProducts[thirdRandomValue].timesClicked++;
   }
 
   if (numOfClicks < lastAttempt-1 && shownArr.length !== arrProducts.length){
