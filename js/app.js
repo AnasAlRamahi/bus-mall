@@ -4,8 +4,13 @@ let arrProducts = [];
 let numOfClicks = 0;
 let lastAttempt = 25;
 
+// 3 arrays to display the data on the chart:
+let arrChartNames = [];
+let arrChartShown = [];
+let arrChartClicked = [];
+
 // This array will contain all the images that have been shown
-// and save it inside. The code was designed to prevent the 
+// and save it inside. The code was designed to prevent the
 // images contined here to appear more than once.
 let shownArr = [];
 
@@ -137,7 +142,6 @@ centerImage.addEventListener('click', roundImages);
 rightImage.addEventListener('click', roundImages);
 
 function roundImages(event){
-  numOfClicks++;
 
   if(event.target.id === 'left-image'){
     arrProducts[firstRandomValue].timesClicked++;
@@ -156,21 +160,67 @@ function roundImages(event){
     rightImage.removeEventListener('click', roundImages);
     console.log(arrProducts);
   }
+
+  numOfClicks++;
 }
 
 function viewResults(){
   let ulEl = document.createElement('ul');
   main.appendChild(ulEl);
   for (let i = 0; i < arrProducts.length; i++) {
-    let liEl = document.createElement('li');
-    ulEl.appendChild(liEl);
-    liEl.textContent = `${arrProducts[i].productName} had ${arrProducts[i].timesClicked} votes, and was seen ${arrProducts[i].timesShown} times.`;
+    arrChartNames.push(arrProducts[i].productName);
+    arrChartShown.push(arrProducts[i].timesShown);
+    arrChartClicked.push(arrProducts[i].timesClicked);
+    // let liEl = document.createElement('li');
+    // ulEl.appendChild(liEl);
+    // liEl.textContent = `${arrProducts[i].productName} had ${arrProducts[i].timesClicked} votes, and was seen ${arrProducts[i].timesShown} times.`;
     buttonEl.removeEventListener('click', viewResults);
   }
+  console.log(arrChartNames);
+  console.log(arrChartShown);
+  console.log(arrChartClicked);
+
+  // We call the chart render function instead of the list
+  viewChart();
 }
 
-let element;
-for (let i = 0; i < arrProducts.length; i++) {
-  element += arrProducts[i].timesShown;
-  console.log(element);
+
+function viewChart(){
+  let ctx = document.getElementById('myChart');
+  let myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: arrChartNames,
+      datasets: [{
+        label: '# of Votes',
+        data: arrChartShown,
+        backgroundColor: [
+          'rgba(54, 162, 235, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+        ],
+        borderWidth: 1
+      },{
+        label: '# of Clicks',
+        data: arrChartClicked,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+        ],
+        borderWidth: 1
+      }
+      ]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
 }
+
