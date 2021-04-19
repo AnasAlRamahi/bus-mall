@@ -2,7 +2,7 @@
 
 let arrProducts = [];
 let numOfClicks = 0;
-let lastAttempt = 5;
+let lastAttempt = 25;
 
 // 3 arrays to display the data on the chart:
 let arrChartNames = [];
