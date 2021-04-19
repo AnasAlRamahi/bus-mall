@@ -1,8 +1,8 @@
 'use strict';
 
-let arrProducts = [];
-let numOfClicks = 0;
-let lastAttempt = 5;
+let arrProducts = []; // Stores all of the image objects
+let numOfClicks = 0; // Stores the number of click the user does on the sectoin or on the images
+let lastAttempt = 25; // The number of attempts the user has before rendering the result
 
 // 3 arrays to display the data on the chart:
 let arrChartNames = [];
@@ -14,7 +14,7 @@ let arrChartClicked = [];
 // images contined here to appear more than once.
 let shownArr = [];
 
-// let section = document.getElementById('productsSection');
+let mainSection = document.getElementById('productsSection');
 let main = document.getElementById('main');
 let buttonEl = document.getElementById('viewResults');
 
@@ -72,12 +72,14 @@ let rightImage = document.getElementById('right-image');
 let thirdRandomValue;
 
 function render(){
+  // this is the initial value for the random image index before it gets checked...
   firstRandomValue = randomImage();
   secondRandomValue = randomImage();
   thirdRandomValue = randomImage();
 
+  // This while will check if the random numbers are duplicate or was viewed last round
   // This condition in the while loop was put to prevent
-  // showing the same image twice.
+  // showing the same image in the next round.
   while(firstRandomValue === secondRandomValue || firstRandomValue === thirdRandomValue || secondRandomValue === thirdRandomValue
      || shownArr.includes(firstRandomValue)
      || shownArr.includes(secondRandomValue)
@@ -93,17 +95,14 @@ function render(){
 
   leftImage.src = arrProducts[firstRandomValue].imgPath;
   arrProducts[firstRandomValue].timesShown++;
-  // shownArr.push(arrProducts[firstRandomValue]);
   shownArr[0] = firstRandomValue;
 
   centerImage.src = arrProducts[secondRandomValue].imgPath;
   arrProducts[secondRandomValue].timesShown++;
-  // shownArr.push(arrProducts[secondRandomValue]);
   shownArr[1] = secondRandomValue;
 
   rightImage.src = arrProducts[thirdRandomValue].imgPath;
   arrProducts[thirdRandomValue].timesShown++;
-  // shownArr.push(arrProducts[thirdRandomValue]);
   shownArr[2] = thirdRandomValue;
 
 
@@ -111,28 +110,29 @@ function render(){
 
 render();
 
-leftImage.addEventListener('click', roundImages);
-centerImage.addEventListener('click', roundImages);
-rightImage.addEventListener('click', roundImages);
 
+mainSection.addEventListener('click', roundImages);
+
+
+// The following function will be called each click the user make until the last attempt:
 function roundImages(event){
 
   if(event.target.id === 'left-image'){
     arrProducts[firstRandomValue].timesClicked++;
   }else if(event.target.id === 'center-image') {
     arrProducts[secondRandomValue].timesClicked++;
+  }else if(event.target.id === 'right-image') {
+    arrProducts[thirdRandomValue].timesClicked++;
   }else
   {
-    arrProducts[thirdRandomValue].timesClicked++;
+    alert('Please click on the images...')
   }
 
   if (numOfClicks < lastAttempt-1 && shownArr.length !== arrProducts.length){
     render();
   }else{
     buttonEl.addEventListener('click', viewResults);
-    leftImage.removeEventListener('click', roundImages);
-    centerImage.removeEventListener('click', roundImages);
-    rightImage.removeEventListener('click', roundImages);
+    mainSection.removeEventListener('click', roundImages);
     console.log(arrProducts);
   }
 
@@ -143,6 +143,7 @@ function viewResults(){
   let ulEl = document.createElement('ul');
   main.appendChild(ulEl);
   for (let i = 0; i < arrProducts.length; i++) {
+    // Here we are inserting data inside the chart data arrays:
     arrChartNames.push(arrProducts[i].productName);
     arrChartShown.push(arrProducts[i].timesShown);
     arrChartClicked.push(arrProducts[i].timesClicked);
