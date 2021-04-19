@@ -4,6 +4,7 @@ let arrProducts = []; // Stores all of the image objects
 let numOfClicks = 0; // Stores the number of click the user does on the sectoin or on the images
 let lastAttempt = 25; // The number of attempts the user has before rendering the result
 
+
 // 3 arrays to display the data on the chart:
 let arrChartNames = [];
 let arrChartShown = [];
