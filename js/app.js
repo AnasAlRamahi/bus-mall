@@ -85,13 +85,6 @@ function render(){
     firstRandomValue = randomImage();
     secondRandomValue = randomImage();
     thirdRandomValue = randomImage();
-    //this if was put to prevent infinite loop if the pictures ended before the tries when you change the number of attempts.
-    if(shownArr.length === arrProducts.length){
-      buttonEl.addEventListener('click', viewResults);
-      leftImage.removeEventListener('click', roundImages);
-      centerImage.removeEventListener('click', roundImages);
-      rightImage.removeEventListener('click', roundImages);
-      break;
     }
   }
   console.log(firstRandomValue);
