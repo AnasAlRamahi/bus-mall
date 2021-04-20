@@ -2,7 +2,7 @@
 
 let arrProducts = []; // Stores all of the image objects
 let numOfClicks = 0; // Stores the number of click the user does on the sectoin or on the images
-let lastAttempt = 25; // The number of attempts the user has before rendering the result
+let lastAttempt = 5; // The number of attempts the user has before rendering the result
 
 
 // 3 arrays to display the data on the chart:
@@ -106,8 +106,10 @@ function render(){
   arrProducts[thirdRandomValue].timesShown++;
   shownArr[2] = thirdRandomValue;
 
-
+  setItemsLS();
 }
+
+getItemLS();
 
 render();
 
@@ -126,7 +128,7 @@ function roundImages(event){
     arrProducts[thirdRandomValue].timesClicked++;
   }else
   {
-    alert('Please click on the images...')
+    alert('Please click on the images...');
   }
 
   if (numOfClicks < lastAttempt-1 && shownArr.length !== arrProducts.length){
@@ -136,7 +138,7 @@ function roundImages(event){
     mainSection.removeEventListener('click', roundImages);
     console.log(arrProducts);
   }
-
+  setItemsLS();
   numOfClicks++;
 }
 
@@ -148,9 +150,9 @@ function viewResults(){
     arrChartNames.push(arrProducts[i].productName);
     arrChartShown.push(arrProducts[i].timesShown);
     arrChartClicked.push(arrProducts[i].timesClicked);
-    // let liEl = document.createElement('li');
-    // ulEl.appendChild(liEl);
-    // liEl.textContent = `${arrProducts[i].productName} had ${arrProducts[i].timesClicked} votes, and was seen ${arrProducts[i].timesShown} times.`;
+    let liEl = document.createElement('li');
+    ulEl.appendChild(liEl);
+    liEl.textContent = `${arrProducts[i].productName} had ${arrProducts[i].timesClicked} votes, and was seen ${arrProducts[i].timesShown} times.`;
     buttonEl.removeEventListener('click', viewResults);
   }
   console.log(arrChartNames);
@@ -199,5 +201,18 @@ function viewChart(){
       }
     }
   });
+}
+
+
+function setItemsLS(){
+  let arrStr = JSON.stringify(arrProducts);
+  localStorage.setItem('itemObject', arrStr); 
+}
+
+function getItemLS(){
+  let item = JSON.parse(localStorage.getItem('itemObject'));
+  if(item){
+    arrProducts = item;
+  }
 }
 
